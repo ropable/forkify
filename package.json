@@ -1,0 +1,23 @@
+{
+  "name": "forkify",
+  "version": "0.0.1",
+  "description": "forkify project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ropable/forkify.git"
+  },
+  "author": "Ashley Felton <ashley@ropable.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ropable/forkify/issues"
+  },
+  "homepage": "https://github.com/ropable/forkify#readme",
+  "devDependencies": {
+    "webpack": "^4.17.2"
+  },
+  "dependencies": {}
+}
