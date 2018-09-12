@@ -1,3 +1,1 @@
-import x from "./test";
-
-console.log(x);
+console.log("FOOBAR");
