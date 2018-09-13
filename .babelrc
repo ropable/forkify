@@ -1,0 +1,13 @@
+{
+    "presets": [
+        ["env", {
+            "targets": {
+                "browsers": [
+                    "last 5 versions",
+                    "ie >= 10",
+                    "not op_mini all"
+                ]
+            }
+        }]
+    ]
+}
