@@ -36,3 +36,16 @@ elements.searchForm.addEventListener("submit", e => {
   e.preventDefault()
   controlSearch()
 })
+
+elements.searchResPages.addEventListener("click", e => {
+  // No matter where we click in a pagination button, get the ancestor button element.
+  const btn = e.target.closest(".btn-inline")
+  if (btn) {
+    const goToPage = parseInt(btn.dataset.goto, 10)  // Data attribute on the button element.
+    // Clear previous results.
+    searchView.clearResults()
+    // Render next page of results.
+    searchView.renderResults(state.search.results, goToPage)
+    console.log(goToPage)
+  }
+})
