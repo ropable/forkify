@@ -1,9 +1,11 @@
 import Search from "./models/Search"
 import Recipe from "./models/Recipe"
 import List from "./models/List"
+import Likes from "./models/Likes"
 import * as searchView from "./views/searchView"
 import * as recipeView from "./views/recipeView"
 import * as listView from "./views/listView"
+import * as likesView from "./views/likesView"
 import {elements, renderLoader, clearLoader} from "./views/base"
 
 /* Global state
@@ -94,10 +96,12 @@ const controlRecipe = async () => {
       state.recipe.calcTime()
       state.recipe.calcServings()
 
-      // Render recipe.
-      //console.log(state.recipe)
+      // Render the recipe.
       clearLoader()
-      recipeView.renderRecipe(state.recipe)
+      recipeView.renderRecipe(
+        state.recipe,
+        state.likes.isLiked(id)
+      )
 
     } catch (error) {
       console.log(error)
@@ -122,6 +126,37 @@ const controlList = () => {
   })
 }
 
+/*
+ * LIKES CONTROLLER
+ */
+state.likes = new Likes()  // FIXME
+const controlLike = () => {
+  // ES6 if-then style:
+  if (!state.likes) state.likes = new Likes()
+
+  const currentID = state.recipe.id
+
+  // User has not yet liked the recipe.
+  if (!state.likes.isLiked(currentID)) {
+    // Add like to the state
+    const newLike = state.likes.addLike(
+      currentID,
+      state.recipe.title,
+      state.recipe.author,
+      state.recipe.img
+    )
+    // Toggle the like button
+    likesView.toggleLikeBtn(true)
+
+    // Add like to the UI list
+
+  // User has already liked the current recipe.
+  } else {
+    state.likes.deleteLike(currentID)
+    likesView.toggleLikeBtn(false)
+  }
+}
+
 //window.addEventListener("hashchange", controlRecipe)
 //window.addEventListener("load", controlRecipe)
 // Below is a quick way to add a single function to multiple event listeners:
@@ -142,7 +177,11 @@ elements.recipe.addEventListener("click", e => {
     state.recipe.updateServings("inc")
     recipeView.updateServingsIngredients(state.recipe)
   } else if (e.target.matches(".recipe__btn--add, .recipe__btn--add *")){
+    // Add ingredients to shopping list.
     controlList()
+  } else if (e.target.matches(".recipe__love, .recipe__love *")) {
+    // Like controller.
+    controlLike()
   }
 })
 
@@ -162,4 +201,3 @@ elements.shopping.addEventListener("click", e => {
     state.list.updateCount(id, value)
   }
 })
-
