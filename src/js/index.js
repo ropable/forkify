@@ -130,31 +130,35 @@ const controlList = () => {
  * LIKES CONTROLLER
  */
 state.likes = new Likes()  // FIXME
+likesView.toggleLikesMenu(state.likes.getNumLikes())  //FIXME
+
 const controlLike = () => {
   // ES6 if-then style:
   if (!state.likes) state.likes = new Likes()
-
   const currentID = state.recipe.id
 
   // User has not yet liked the recipe.
   if (!state.likes.isLiked(currentID)) {
-    // Add like to the state
+    // Add new like to the state.
     const newLike = state.likes.addLike(
       currentID,
       state.recipe.title,
       state.recipe.author,
       state.recipe.img
     )
-    // Toggle the like button
+    // Toggle the like button.
     likesView.toggleLikeBtn(true)
-
-    // Add like to the UI list
-
-  // User has already liked the current recipe.
+    // Add like to the UI list.
+    likesView.renderLike(newLike)
+  // User has already liked the current recipe (delete it).
   } else {
     state.likes.deleteLike(currentID)
     likesView.toggleLikeBtn(false)
+    likesView.deleteLike(currentID)
   }
+
+  // Toggle the likes menu on/off.
+  likesView.toggleLikesMenu(state.likes.getNumLikes())
 }
 
 //window.addEventListener("hashchange", controlRecipe)
