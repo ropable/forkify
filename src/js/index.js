@@ -15,7 +15,6 @@ import {elements, renderLoader, clearLoader} from "./views/base"
  * - Linked recipes
  */
 const state = {}
-window.state = state
 
 /**
  * SEARCH CONTROLLER
@@ -62,7 +61,6 @@ elements.searchResPages.addEventListener("click", e => {
     searchView.clearResults()
     // Render next page of results.
     searchView.renderResults(state.search.results, goToPage)
-    console.log(goToPage)
   }
 })
 
@@ -129,9 +127,6 @@ const controlList = () => {
 /*
  * LIKES CONTROLLER
  */
-state.likes = new Likes()  // FIXME
-likesView.toggleLikesMenu(state.likes.getNumLikes())  //FIXME
-
 const controlLike = () => {
   // ES6 if-then style:
   if (!state.likes) state.likes = new Likes()
@@ -166,6 +161,17 @@ const controlLike = () => {
 // Below is a quick way to add a single function to multiple event listeners:
 ["hashchange", "load"].forEach(event => window.addEventListener(event, controlRecipe))
 
+
+// Restore likes recipes on page load.
+window.addEventListener('load', () => {
+  state.likes = new Likes()
+  // Restore any saved likes.
+  state.likes.readStorage()
+  // Toggle like menu button.
+  likesView.toggleLikesMenu(state.likes.getNumLikes())
+  // Render the likes to the UI.
+  state.likes.likes.forEach(like => likesView.renderLike(like))
+})
 
 // Handling recipe button clicks.
 elements.recipe.addEventListener("click", e => {
